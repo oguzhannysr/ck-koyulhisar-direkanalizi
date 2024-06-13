@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/TahminiAaVerileri_1.js"></script>
+        <script src="data/TehlikeSnflarElektrikDirekleri_2.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[40.343876061775276,38.094068143145044],[40.370263783323594,38.13212096578085]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        document.querySelector(".leaflet-popup-pane").addEventListener("load", function(event) {
+          var tagName = event.target.tagName,
+            popup = map._popup;
+          // Also check if flag is already set.
+          if (tagName === "IMG" && popup && !popup._updated) {
+            popup._updated = true; // Set flag to prevent looping.
+            popup.update();
+          }
+        }, true);
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleSatelliteHybrid_0');
+        map.getPane('pane_GoogleSatelliteHybrid_0').style.zIndex = 400;
+        var layer_GoogleSatelliteHybrid_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleSatelliteHybrid_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_GoogleSatelliteHybrid_0;
+        map.addLayer(layer_GoogleSatelliteHybrid_0);
+        function pop_TahminiAaVerileri_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">label</th>\
+                        <td class="visible-with-data" id="label">' + (feature.properties['label'] !== null ? autolinker.link(feature.properties['label'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">canopy_height_image_1</th>\
+                        <td class="visible-with-data" id="canopy_height_image_1">' + (feature.properties['canopy_height_image_1'] !== null ? autolinker.link(feature.properties['canopy_height_image_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">canopy_height_image_2</th>\
+                        <td class="visible-with-data" id="canopy_height_image_2">' + (feature.properties['canopy_height_image_2'] !== null ? autolinker.link(feature.properties['canopy_height_image_2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">name</th>\
+                        <td class="visible-with-data" id="name">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">h</th>\
+                        <td class="visible-with-data" id="h">' + (feature.properties['h'] !== null ? autolinker.link(feature.properties['h'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">distance</th>\
+                        <td class="visible-with-data" id="distance">' + (feature.properties['distance'] !== null ? autolinker.link(feature.properties['distance'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sonuç</th>\
+                        <td class="visible-with-data" id="Sonuç">' + (feature.properties['Sonuç'] !== null ? autolinker.link(feature.properties['Sonuç'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_TahminiAaVerileri_1_0(feature) {
+            switch(String(feature.properties['Sonuç'])) {
+                case 'Normal':
+                    return {
+                pane: 'pane_TahminiAaVerileri_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(26,172,208,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Rüzgar Kaynaklı Tehlike İhtimali':
+                    return {
+                pane: 'pane_TahminiAaVerileri_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(107,200,67,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Yangın Kaynaklı Tehlike İhtimali':
+                    return {
+                pane: 'pane_TahminiAaVerileri_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(225,68,25,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_TahminiAaVerileri_1');
+        map.getPane('pane_TahminiAaVerileri_1').style.zIndex = 401;
+        map.getPane('pane_TahminiAaVerileri_1').style['mix-blend-mode'] = 'normal';
+        var layer_TahminiAaVerileri_1 = new L.geoJson(json_TahminiAaVerileri_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_TahminiAaVerileri_1',
+            layerName: 'layer_TahminiAaVerileri_1',
+            pane: 'pane_TahminiAaVerileri_1',
+            onEachFeature: pop_TahminiAaVerileri_1,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_TahminiAaVerileri_1_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_TahminiAaVerileri_1);
+        map.addLayer(layer_TahminiAaVerileri_1);
+        function pop_TehlikeSnflarElektrikDirekleri_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">name</th>\
+                        <td class="visible-with-data" id="name">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Yeni_Sonuç</th>\
+                        <td class="visible-with-data" id="Yeni_Sonuç">' + (feature.properties['Yeni_Sonuç'] !== null ? autolinker.link(feature.properties['Yeni_Sonuç'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_TehlikeSnflarElektrikDirekleri_2_0(feature) {
+            switch(String(feature.properties['Yeni_Sonuç'])) {
+                case 'Normal':
+                    return {
+                pane: 'pane_TehlikeSnflarElektrikDirekleri_2',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(123,214,140,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Normal-Yangın-Rüzgar':
+                    return {
+                pane: 'pane_TehlikeSnflarElektrikDirekleri_2',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,1,56,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Rüzgar-Normal':
+                    return {
+                pane: 'pane_TehlikeSnflarElektrikDirekleri_2',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(1,81,255,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Yangın-Normal':
+                    return {
+                pane: 'pane_TehlikeSnflarElektrikDirekleri_2',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(240,238,110,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_TehlikeSnflarElektrikDirekleri_2');
+        map.getPane('pane_TehlikeSnflarElektrikDirekleri_2').style.zIndex = 402;
+        map.getPane('pane_TehlikeSnflarElektrikDirekleri_2').style['mix-blend-mode'] = 'normal';
+        var layer_TehlikeSnflarElektrikDirekleri_2 = new L.geoJson(json_TehlikeSnflarElektrikDirekleri_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_TehlikeSnflarElektrikDirekleri_2',
+            layerName: 'layer_TehlikeSnflarElektrikDirekleri_2',
+            pane: 'pane_TehlikeSnflarElektrikDirekleri_2',
+            onEachFeature: pop_TehlikeSnflarElektrikDirekleri_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_TehlikeSnflarElektrikDirekleri_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_TehlikeSnflarElektrikDirekleri_2);
+        map.addLayer(layer_TehlikeSnflarElektrikDirekleri_2);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        var overlaysTree = [
+            {label: 'Tehlike Sınıfları (Elektrik Direkleri)<br /><table><tr><td style="text-align: center;"><img src="legend/TehlikeSnflarElektrikDirekleri_2_NormalAğaç0.png" /></td><td>Normal Ağaç</td></tr><tr><td style="text-align: center;"><img src="legend/TehlikeSnflarElektrikDirekleri_2_NormalAğaçYangınRüzgar1.png" /></td><td>Normal Ağaç-Yangın-Rüzgar</td></tr><tr><td style="text-align: center;"><img src="legend/TehlikeSnflarElektrikDirekleri_2_RüzgarNormalAğaç2.png" /></td><td>Rüzgar-Normal Ağaç</td></tr><tr><td style="text-align: center;"><img src="legend/TehlikeSnflarElektrikDirekleri_2_YangınNormalAğaç3.png" /></td><td>Yangın-Normal Ağaç</td></tr></table>', layer: layer_TehlikeSnflarElektrikDirekleri_2},
+            {label: 'Tahmini Ağaç Verileri<br /><table><tr><td style="text-align: center;"><img src="legend/TahminiAaVerileri_1_NormalAğaç0.png" /></td><td>Normal Ağaç</td></tr><tr><td style="text-align: center;"><img src="legend/TahminiAaVerileri_1_RüzgarKaynaklıTehlikeİhtimali1.png" /></td><td>Rüzgar Kaynaklı Tehlike İhtimali</td></tr><tr><td style="text-align: center;"><img src="legend/TahminiAaVerileri_1_YangınKaynaklıTehlikeİhtimali2.png" /></td><td>Yangın Kaynaklı Tehlike İhtimali</td></tr></table>', layer: layer_TahminiAaVerileri_1},
+            {label: "Google Satellite Hybrid", layer: layer_GoogleSatelliteHybrid_0},]
+        var lay = L.control.layers.tree(null, overlaysTree,{
+            //namedToggle: true,
+            //selectorBack: false,
+            //closedSymbol: '&#8862; &#x1f5c0;',
+            //openedSymbol: '&#8863; &#x1f5c1;',
+            //collapseAll: 'Collapse all',
+            //expandAll: 'Expand all',
+            collapsed: true,
+        });
+        lay.addTo(map);
+        setBounds();
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Sonuç": "str","Yeni_Sonuç": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Sonu = document.createElement('div');
+            div_Sonu.id = "div_Sonu";
+            div_Sonu.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Sonu);
+            sel_Sonu = document.createElement('select');
+            sel_Sonu.multiple = true;
+            sel_Sonu.size = 3;
+            sel_Sonu.id = "sel_Sonu";
+            var Sonu_options_str = "<option value='' unselected></option>";
+            sel_Sonu.onchange = function(){filterFunc()};
+            Sonu_options_str  += '<option value="Normal">Normal</option>';
+            Sonu_options_str  += '<option value="Rüzgar Kaynaklı Tehlike İhtimali">Rüzgar Kaynaklı Tehlike İhtimali</option>';
+            Sonu_options_str  += '<option value="Yangın Kaynaklı Tehlike İhtimali">Yangın Kaynaklı Tehlike İhtimali</option>';
+            sel_Sonu.innerHTML = Sonu_options_str;
+            div_Sonu.appendChild(sel_Sonu);
+            var lab_Sonu = document.createElement('div');
+            lab_Sonu.innerHTML = 'Sonuç';
+            lab_Sonu.className = 'filterlabel';
+            div_Sonu.appendChild(lab_Sonu);
+            var reset_Sonu = document.createElement('div');
+            reset_Sonu.innerHTML = 'clear filter';
+            reset_Sonu.className = 'filterlabel';
+            reset_Sonu.onclick = function() {
+                var options = document.getElementById("sel_Sonu").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Sonu.appendChild(reset_Sonu);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Yeni_Sonu = document.createElement('div');
+            div_Yeni_Sonu.id = "div_Yeni_Sonu";
+            div_Yeni_Sonu.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Yeni_Sonu);
+            sel_Yeni_Sonu = document.createElement('select');
+            sel_Yeni_Sonu.multiple = true;
+            sel_Yeni_Sonu.size = 4;
+            sel_Yeni_Sonu.id = "sel_Yeni_Sonu";
+            var Yeni_Sonu_options_str = "<option value='' unselected></option>";
+            sel_Yeni_Sonu.onchange = function(){filterFunc()};
+            Yeni_Sonu_options_str  += '<option value="Normal">Normal</option>';
+            Yeni_Sonu_options_str  += '<option value="Normal-Yangın-Rüzgar">Normal-Yangın-Rüzgar</option>';
+            Yeni_Sonu_options_str  += '<option value="Rüzgar-Normal">Rüzgar-Normal</option>';
+            Yeni_Sonu_options_str  += '<option value="Yangın-Normal">Yangın-Normal</option>';
+            sel_Yeni_Sonu.innerHTML = Yeni_Sonu_options_str;
+            div_Yeni_Sonu.appendChild(sel_Yeni_Sonu);
+            var lab_Yeni_Sonu = document.createElement('div');
+            lab_Yeni_Sonu.innerHTML = 'Yeni_Sonuç';
+            lab_Yeni_Sonu.className = 'filterlabel';
+            div_Yeni_Sonu.appendChild(lab_Yeni_Sonu);
+            var reset_Yeni_Sonu = document.createElement('div');
+            reset_Yeni_Sonu.innerHTML = 'clear filter';
+            reset_Yeni_Sonu.className = 'filterlabel';
+            reset_Yeni_Sonu.onclick = function() {
+                var options = document.getElementById("sel_Yeni_Sonu").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Yeni_Sonu.appendChild(reset_Yeni_Sonu);
+        </script>
+    </body>
+</html>
+
+<div id="map" style="position: relative;">
+    <!-- Harita -->
+</div>
+
+<div id="sagOrtaGorsel1" style="position: fixed; top: 31%; transform: translateY(-60%); right: 0; z-index: 2;">
+    <img src="https://i.ibb.co/K23P1qN/WEB-EKLENTI-2.png" alt="Üst Görsel1" style="width: 370px; height: auto;">
+</div>
+
+<div id="sagOrtaGorsel" style="position: fixed; top: 71%; transform: translateY(-50%); right: 0; z-index: 3;">
+    <img src="https://i.ibb.co/2dX0h3k/WEB-EKLENTI.png" alt="Üst Görsel" style="width: 405px; height: auto;">
+</div>
+
+<div id="sagAltGorsel" style="position: fixed; bottom: 0; right: 0; z-index: 1;">
+    <img src="https://static.wixstatic.com/media/140a3e_18a9f082e4e14f409ac958627c6c7c1e~mv2.png/v1/crop/x_180,y_0,w_1847,h_2182/fill/w_180,h_212,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo%20Mavi_edited.png" alt="Alt Görsel" style="width: 150px; height: auto;">
+</div>
